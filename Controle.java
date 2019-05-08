@@ -16,24 +16,26 @@ public class Controle {
 		try {
 			Usuario u = new Usuario();
 
-			u.setNomeCompleto("petterson");
-			u.setSexo("M");
-			u.setIdade(28);
-			u.setCpf("teste");
-			u.setRg("teste");
-			u.setNacionalidade("teste");
-			u.setEstadoCivil("teste");
-			u.setCelular("teste");
-			u.setTelefoneFixo("teste");
-			u.setDtNasc("teste");
-			u.setEndereco("teste");
-			u.setEmail("teste@teste.com");
+			u.setNomeCompleto(nomeCompleto);
+			u.setSexo(sexo);
+			u.setIdade(idade);
+			u.setCpf(cpf);
+			u.setRg(rg);
+			u.setNacionalidade(nacionalidade);
+			u.setEstadoCivil(estadoCivil);
+			u.setCelular(celular);
+			u.setTelefoneFixo(telefoneFixo);
+			u.setDtNasc(dtNasc);
+			u.setEndereco(endereco);
+			u.setEmail(email);
 			chave = database.insert(u);
-			System.out.println("A chave gerada para este registro foi: " + chave);
-
-		} catch (ClassNotFoundException e) {
+			
+			} 
+		catch (ClassNotFoundException e) {
 			System.err.println("O driver do banco não foi encontrado no ClassPath");
-		} catch (SQLException e) {
+		}
+		
+		catch (SQLException e) {
 			e.printStackTrace();
 			System.err.println("Erro ao executar a instrução de insert" + e.getMessage());
 		}

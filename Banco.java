@@ -126,6 +126,7 @@ public class Banco {
 			usuario.setDtNasc(rs.getString("dtNasc"));
 			usuario.setEndereco(rs.getString("endereco"));
 			usuario.setEmail(rs.getString("email"));
+			usuarios.add(usuario);
 
 		}
 

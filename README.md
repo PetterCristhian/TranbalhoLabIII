@@ -1,4 +1,4 @@
-# TranbalhoLabIII
+﻿# TranbalhoLabIII
 
 1 Abertura de concxão;
 2 select por Id;
@@ -7,3 +7,5 @@
 5 update;
 6 delete;
 7 insert;
+
+-- Corrigido parâmetro de insert, listas de select e bugs de espaço desnecessário

@@ -36,44 +36,30 @@ public class Tela {
 			case 1:
 				System.out.print("Digite seu nome: ");
 				nomeCompleto = option.nextLine();
-				option.nextLine();
 				System.out.print("Digite seu Sexo (M ou F)");
 				sexo = option.nextLine();
-				option.nextLine();
 				System.out.print("Digite sua idade: ");
 				idade = option.nextInt();
 				option.nextLine();
 				System.out.print("Digite seu CPF: ");
 				cpf = option.nextLine();
-				option.nextLine();
 				System.out.print("Digite seu RG: ");
 				rg = option.nextLine();
-				option.nextLine();
 				System.out.print("Digite sua nacionalidade: ");
 				nacionalidade = option.nextLine();
-				option.nextLine();
 				System.out.print("Digite seu estado civil: ");
 				estadoCivil = option.nextLine();
-				option.nextLine();
 				System.out.print("Digite seu celular: ");
 				celular = option.nextLine();
-				option.nextLine();
 				System.out.print("Digite seu telefone fixo: ");
 				telefoneFixo = option.nextLine();
-				option.nextLine();
 				System.out.print("Digite sua data de nascimento (dd/mm/aaaa): ");
 				dtNasc = option.nextLine();
-				option.nextLine();
 				System.out.print("Digite seu endereço: ");
 				endereco = option.nextLine();
-				option.nextLine();
 				System.out.print("Digite seu email: ");
 				email = option.nextLine();
-				option.nextLine();
-				
-				
-				
-				
+							
 				status = controla.insereUsuario(nomeCompleto,sexo,idade,cpf,rg,nacionalidade,estadoCivil,celular,telefoneFixo,dtNasc,endereco,email);
 				if (status <= 0) {
 					System.out.println("Erro ao inserir");
