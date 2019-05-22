@@ -9,3 +9,5 @@
 7 insert;
 
 -- Corrigido parâmetro de insert, listas de select e bugs de espaço desnecessário
+
+-- Alteração de parâmetros select
