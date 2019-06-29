@@ -1,4 +1,4 @@
-package br.com.david.facet.lab3;
+package model;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -9,16 +9,18 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import user.Usuario;
+
 public class Banco {
 
 	public int insert(Usuario usu) throws ClassNotFoundException, SQLException {
+
 		Connection conn = this.getConnection();
 
-		String sql = "insert into pessoa (nomeCompleto,sexo,idade,cpf,rg,nacionalidade,estadoCivil,celular,telefoneFixo,dtNasc,endereco,email)"
-				+ "values ('" + usu.getNomeCompleto() + "'" + ",'" + usu.getSexo() + "'" + ",'" + usu.getIdade() + "'"
-				+ ",'" + usu.getCpf() + "'," + " '" + usu.getRg() + "'," + " '" + usu.getNacionalidade() + "'," + " '"
-				+ usu.getEstadoCivil() + "'," + " '" + usu.getCelular() + "'," + " '" + usu.getTelefoneFixo() + "',"
-				+ " '" + usu.getDtNasc() + "'," + " '" + usu.getEndereco() + "'," + " '" + usu.getEmail() + "')";
+		String sql = "insert into pessoa (nomeCompleto,cpf,dtNasc,nomeMae,nomePai,endereco,telefone,celular,email)"
+				+ "values ('" + usu.getNomeCompleto() + "'" + ",'" + usu.getCpf() + "'" + ",'" +  usu.getDtNasc() + "'"
+				+ ",'" + usu.getNomeMae() + "'," + " '" + usu.getNomePai() + "'," + " '" + usu.getEndereco() + "'," + " '"
+				+ usu.getTelefoneFixo() + "'," + " '" + usu.getCelular() + "'," + " '" + usu.getEmail() + "')";
 
 		PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 		int ret = ps.executeUpdate();
@@ -32,8 +34,27 @@ public class Banco {
 		return ret;
 
 	}
+	
+	public int insertAluno(Usuario usu) throws ClassNotFoundException, SQLException {
 
-	public List<Usuario> selectAll() throws ClassNotFoundException, SQLException {
+		Connection conn = this.getConnection();
+
+		String sql = "insert into aluno (matricula,cpf,curso)"
+				+ "values ('" + usu.getMatricula() + "'" + ",'" + usu.getCpf() + "'" + ",'" +  usu.getCurso() + "')";
+
+		PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+		int ret = ps.executeUpdate();
+
+		ResultSet rs = ps.getGeneratedKeys();
+		if (rs.next()) {
+			ret = rs.getInt(1);
+		}
+
+		conn.close();
+		return ret;
+
+	}
+	public List<Usuario> selectAllUsuario() throws ClassNotFoundException, SQLException {
 		List<Usuario> usuarios = new ArrayList<Usuario>();
 		Connection conn = this.getConnection();
 		String sql = "select * from pessoa";
@@ -45,18 +66,14 @@ public class Banco {
 		while (rs.next()) {
 
 			usuario = new Usuario();
-			usuario.setId(rs.getInt("idPessoa"));
 			usuario.setNomeCompleto(rs.getString("nomeCompleto"));
-			usuario.setSexo(rs.getString("sexo"));
-			usuario.setIdade(rs.getInt("idade"));
 			usuario.setCpf(rs.getString("cpf"));
-			usuario.setRg(rs.getString("rg"));
-			usuario.setNacionalidade(rs.getString("nacionalidade"));
-			usuario.setEstadoCivil(rs.getString("estadoCivil"));
-			usuario.setCelular(rs.getString("celular"));
-			usuario.setTelefoneFixo(rs.getString("telefoneFixo"));
 			usuario.setDtNasc(rs.getString("dtNasc"));
 			usuario.setEndereco(rs.getString("endereco"));
+			usuario.setNomeMae(rs.getString("nomeMae"));
+			usuario.setNomePai(rs.getString("nomePai"));
+			usuario.setTelefoneFixo(rs.getString("telefoneFixo"));
+			usuario.setCelular(rs.getString("celular"));
 			usuario.setEmail(rs.getString("email"));
 			usuarios.add(usuario);
 
@@ -66,32 +83,21 @@ public class Banco {
 
 		return usuarios;
 	}
-
-	public List<Usuario> selectName(String name) throws ClassNotFoundException, SQLException {
+	
+	public List<Usuario> selectAllCurso() throws ClassNotFoundException, SQLException {
 		List<Usuario> usuarios = new ArrayList<Usuario>();
 		Connection conn = this.getConnection();
-		String sql = "select * from pessoa where nomeCompleto like ?";
+		String sql = "select * from curso";
 		PreparedStatement ps = conn.prepareStatement(sql);
-		ps.setString(1, "%" + name + "%");
 		ResultSet rs = ps.executeQuery();
+
 		Usuario usuario = null;
 
 		while (rs.next()) {
 
 			usuario = new Usuario();
-			usuario.setId(rs.getInt("idPessoa"));
-			usuario.setNomeCompleto(rs.getString("nomeCompleto"));
-			usuario.setSexo(rs.getString("sexo"));
-			usuario.setIdade(rs.getInt("idade"));
-			usuario.setCpf(rs.getString("cpf"));
-			usuario.setRg(rs.getString("rg"));
-			usuario.setNacionalidade(rs.getString("nacionalidade"));
-			usuario.setEstadoCivil(rs.getString("estadoCivil"));
-			usuario.setCelular(rs.getString("celular"));
-			usuario.setTelefoneFixo(rs.getString("telefoneFixo"));
-			usuario.setDtNasc(rs.getString("dtNasc"));
-			usuario.setEndereco(rs.getString("endereco"));
-			usuario.setEmail(rs.getString("email"));
+			usuario.setCurso(rs.getString("idCurso"));
+			usuario.setNomeCurso(rs.getString("nomeCurso"));
 			usuarios.add(usuario);
 
 		}
@@ -99,47 +105,38 @@ public class Banco {
 		conn.close();
 
 		return usuarios;
-
 	}
-
-	public List<Usuario> selectId(int id) throws ClassNotFoundException, SQLException {
-
+	
+	public List<Usuario> selectAllAluno() throws ClassNotFoundException, SQLException {
 		List<Usuario> usuarios = new ArrayList<Usuario>();
 		Connection conn = this.getConnection();
-		String sql = "select * from pessoa where idPessoa = '" + id + "'";
+		String sql = "select u.nome, a.aluno_matricula, a.aluno_cpf, c.nome_curso from aluno a join curso c on a.cpf = c.aluno_cpf join usuario u on u.cpf = a.aluno_cpf";
 		PreparedStatement ps = conn.prepareStatement(sql);
 		ResultSet rs = ps.executeQuery();
+
 		Usuario usuario = null;
-		if (rs.next()) {
+
+		while (rs.next()) {
 
 			usuario = new Usuario();
-			usuario.setId(rs.getInt("idPessoa"));
 			usuario.setNomeCompleto(rs.getString("nomeCompleto"));
-			usuario.setSexo(rs.getString("sexo"));
-			usuario.setIdade(rs.getInt("idade"));
+			usuario.setMatricula(rs.getInt("matricula"));
 			usuario.setCpf(rs.getString("cpf"));
-			usuario.setRg(rs.getString("rg"));
-			usuario.setNacionalidade(rs.getString("nacionalidade"));
-			usuario.setEstadoCivil(rs.getString("estadoCivil"));
-			usuario.setCelular(rs.getString("celular"));
-			usuario.setTelefoneFixo(rs.getString("telefoneFixo"));
-			usuario.setDtNasc(rs.getString("dtNasc"));
-			usuario.setEndereco(rs.getString("endereco"));
-			usuario.setEmail(rs.getString("email"));
+			usuario.setCurso(rs.getString("curso"));
 			usuarios.add(usuario);
 
 		}
 
 		conn.close();
-		return usuarios;
 
+		return usuarios;
 	}
 
-	public boolean delete(int id) throws ClassNotFoundException, SQLException {
+	public boolean delete(String cpf) throws ClassNotFoundException, SQLException {
 
 		Connection conn = this.getConnection();
 		boolean flag = false;
-		String sql = "delete from pessoa where idPessoa = '" + id + "'";
+		String sql = "delete from pessoa where cpf = '" + cpf + "'";
 
 		PreparedStatement ps = conn.prepareStatement(sql);
 		int ret = ps.executeUpdate();
@@ -156,14 +153,14 @@ public class Banco {
 
 	}
 
-	public boolean update(String banco, int id, String dado) throws ClassNotFoundException, SQLException {
+	public boolean update(String banco, String cpf, String dado) throws ClassNotFoundException, SQLException {
 
 		Connection conn = this.getConnection();
 		boolean flag = false;
-		String query = "update pessoa set " + banco + " = ? where idPessoa = ?";
+		String query = "update usuario set " + banco + " = ? where cpf = ?";
 		PreparedStatement preparedStmt = conn.prepareStatement(query);
 		preparedStmt.setString(1, dado);
-		preparedStmt.setInt(2, id);
+		preparedStmt.setString(2, cpf);
 		int ret = preparedStmt.executeUpdate();
 		if (ret == 1) {
 			flag = true;
@@ -178,11 +175,9 @@ public class Banco {
 	}
 
 	public Connection getConnection() throws ClassNotFoundException, SQLException {
-		Class.forName(com.mysql.cj.jdbc.Driver.class.getName());
-		Connection conn = DriverManager.getConnection(
-				"jdbc:mysql://localhost:3306/facetlab3?allowPublicKeyRetrieval=true&useSSL=false", "39862",
-				"Positivo@99");
+		Class.forName(org.sqlite.JDBC.class.getName());
+		Connection conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\multi\\eclipse-workspace2\\trabJava\\facetlab3.db");
 		return conn;
-	}
+	}	
 
 }

@@ -1,14 +1,17 @@
-package br.com.david.facet.lab3;
+package view;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import control.Controle;
+import user.Usuario;
+
 public class Tela {
 
 	public static void main(String[] args) {
 
-		Scanner option = new Scanner(System.in);
+	/*	Scanner option = new Scanner(System.in);
 
 		int opcao;
 		int id;
@@ -326,6 +329,6 @@ public class Tela {
 		} while (opcao != 0);
 
 		option.close();
-
+*/
 	}
 }
